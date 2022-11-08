@@ -32,8 +32,16 @@ async function dbConnect() {
     /// get apis
 
     app.get("/meals", async (req, res) => {
+      const size = parseInt(req.query.size);
+      console.log(size);
       const query = {};
-      const cursor = await mealsCollection.find({});
+      let cursor;
+
+      if (size == 0) {
+        cursor = await mealsCollection.find({});
+      } else {
+        cursor = await mealsCollection.find({}).limit(size);
+      }
       const result = await cursor.sort({ time: -1 }).toArray();
       res.send({ status: 400, meals: result });
     });
