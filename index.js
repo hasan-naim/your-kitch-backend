@@ -28,12 +28,12 @@ async function dbConnect() {
 
     /// database collection
     const mealsCollection = database.collection("meals");
+    const reviewCollection = database.collection("reviews");
 
     /// get apis
 
     app.get("/meals", async (req, res) => {
       const size = parseInt(req.query.size);
-      console.log(size);
       const query = {};
       let cursor;
 
@@ -52,6 +52,18 @@ async function dbConnect() {
       const cursor = mealsCollection.find(query);
       const meal = await cursor.toArray();
       res.send({ status: 400, meal: meal });
+    });
+
+    ///post apies
+
+    app.post("/review/post", async (req, res) => {
+      const data = req.body;
+      const addData = {
+        ...data,
+        time: new Date(),
+      };
+      const result = await reviewCollection.insertOne(addData);
+      res.send(result);
     });
 
     /// handaling the error
