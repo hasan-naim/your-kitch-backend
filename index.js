@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
 
@@ -45,7 +45,19 @@ async function dbConnect() {
       const result = await cursor.sort({ time: -1 }).toArray();
       res.send({ status: 400, meals: result });
     });
-  } catch (error) {}
+
+    app.get("/meals/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const cursor = mealsCollection.find(query);
+      const meal = await cursor.toArray();
+      res.send({ status: 400, meal: meal });
+    });
+
+    /// handaling the error
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 dbConnect().catch((err) => console.log(err));
 app.listen(port, () => console.log(`server is listening on ${port}`));
