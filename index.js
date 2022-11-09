@@ -83,6 +83,16 @@ async function dbConnect() {
       res.send(result);
     });
 
+    /// delete
+
+    app.delete("/reviewsByEmail", async (req, res) => {
+      const id = req.query.id;
+      const query = { _id: ObjectId(id) };
+
+      const result = await reviewCollection.deleteOne(query);
+      res.send({ status: 400, result: result });
+    });
+
     /// handaling the error
   } catch (error) {
     console.log(error.message);
