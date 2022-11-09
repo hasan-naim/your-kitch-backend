@@ -62,6 +62,14 @@ async function dbConnect() {
       const result = await cursor.sort({ time: -1 }).toArray();
       res.send({ status: 400, reviews: result });
     });
+    /// by email
+    app.get("/reviewsByEmail", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = reviewCollection.find(query);
+      const result = await cursor.sort({ time: -1 }).toArray();
+      res.send({ status: 400, reviews: result });
+    });
 
     ///post apies
 
