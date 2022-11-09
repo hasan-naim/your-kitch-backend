@@ -38,7 +38,7 @@ async function dbConnect() {
       let cursor;
 
       if (size == 0) {
-        cursor = await mealsCollection.find({});
+        cursor = await mealsCollection.find(query);
       } else {
         cursor = await mealsCollection.find({}).limit(size);
       }
@@ -52,6 +52,15 @@ async function dbConnect() {
       const cursor = mealsCollection.find(query);
       const meal = await cursor.toArray();
       res.send({ status: 400, meal: meal });
+    });
+
+    /// get reviews by id
+    app.get("/reviewsById/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { mealId: id };
+      const cursor = reviewCollection.find(query);
+      const result = await cursor.sort({ time: -1 }).toArray();
+      res.send({ status: 400, reviews: result });
     });
 
     ///post apies
