@@ -89,6 +89,23 @@ async function dbConnect() {
       res.send(result);
     });
 
+    /// update review
+
+    app.patch("/editedreview/:id", async (req, res) => {
+      const id = req.params.id;
+      const bodyData = req.body;
+      const query = { _id: ObjectId(id) };
+      const updatedData = {
+        $set: {
+          details: bodyData.details,
+          rating: bodyData.rating,
+        },
+      };
+
+      const result = await reviewCollection.updateOne(query, updatedData);
+      res.send({ status: 400, result: result });
+    });
+
     /// delete
 
     app.delete("/reviewsByEmail", async (req, res) => {
