@@ -58,16 +58,15 @@ async function dbConnect() {
     app.get("/reviewsById/:id", async (req, res) => {
       const id = req.params.id;
       const query = { mealId: id };
-
-      const result = await reviewCollection.findOne(query);
-      res.send({ status: 400, result: result });
+      const cursor = reviewCollection.find(query);
+      const result = await cursor.sort({ time: -1 }).toArray();
+      res.send({ status: 400, reviews: result });
     });
     app.get("/reviewtoedit/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const cursor = reviewCollection.find(query);
-      const result = await cursor.sort({ time: -1 }).toArray();
-      res.send({ status: 400, reviews: result });
+      const result = await reviewCollection.findOne(query);
+      res.send({ status: 400, review: result });
     });
     /// by email
     app.get("/reviewsByEmail", async (req, res) => {
