@@ -128,6 +128,17 @@ async function dbConnect() {
       res.send(result);
     });
 
+    app.post("/addmeal", async (req, res) => {
+      const data = req.body;
+      const dataToADD = {
+        ...data,
+        time: new Date(),
+      };
+
+      const result = await mealsCollection.insertOne(dataToADD);
+      res.send({ status: 200, result: result });
+    });
+
     /// update review
 
     app.patch("/editedreview/:id", async (req, res) => {
